@@ -18,7 +18,7 @@ def less_than_zero(a, b, c)
 end
 
 def wrong_sum_triangle_sides(a, b, c)
-	return ((a + b + c <= 0) and ((a + b < c) or (a + c < b) or (c + b < a)))
+	return ((a + b + c == 0) or ((a + b <= c) or (a + c <= b) or (c + b <= a)))
 end
 
 def error_triangle(a, b, c)
