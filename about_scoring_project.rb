@@ -29,9 +29,35 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # Your goal is to write the score method.
 
+def punctuation(num, times)
+  total = 0
+  d, m = times.divmod(3)
+  if d > 0
+    if num == 1
+      total += 1000 * d
+    else
+      total += 100 * d * num
+    end
+  end
+  if m > 0
+    if num == 1
+      total += 100 * m
+    elsif num == 5
+      total += 50 * m
+    end
+  end
+  return total
+end
+
 def score(dice)
   # You need to write this method
-  dice.count
+  total = 0
+  total_array = Array.new(6, 0)
+  dice.each {|x| total_array[x - 1] += 1}
+  total_array.each_index do |x|
+    total += punctuation(x + 1, total_array[x])
+  end
+  return total
 end
 
 class AboutScoringProject < Neo::Koan
