@@ -13,29 +13,32 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # of the Proxy class is given in the AboutProxyObjectProject koan.
 
 class Proxy
-  attr_accessor :channel
-  attr_reader :power
+  attr_reader :messages
+
   def initialize(target_object)
     @object = target_object
-    # ADD MORE CODE HERE
-    @power = false
+    @messages = []
   end
 
-  # WRITE CODE HERE
-  def on?
-    true
+  def called?(method_name)
+    @messages.include? method_name
   end
 
-  def messages
-    [:power, :channel=]
+  def number_of_times_called(method_name)
+    @messages.count method_name
   end
 
-  def called?(attribute)
-    true
-  end
+  def method_missing(method_name, *args, &block)
+    if @object.respond_to? method_name
+      # track each method called that target object can respond to
+      @messages.push method_name
 
-  def power
-    @power = ! @power
+      # call the method!
+      @object.send method_name, *args
+    else
+      # all other cases: default behavior (raises NoMethodError)
+      super method_name, *args, &block
+    end
   end
 end
 
